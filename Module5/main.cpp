@@ -28,15 +28,15 @@ void testForPass()
 	//Tilldelas (=) från Tal dvs. rtal=tal;
 	rs3 = Rint(13, 3);
 	assert(rs3 == Rshort(13, 3));
-//	rs3 = rll3 = -17;
-//	assert(rs3 == Rshort(-17));
+	rs3 = rll3 = -17;
+	assert(rs3 == Rshort(-17));
 
 	//+= med Tal dvs. rtal += tal;
 //	assert((rs3 += 4) == Rshort(-13));
 
 	//+  dvs. (rtal + tal)
 	rs3 = Rshort(13, 3);
-	assert(rs3 + rll2 == Rshort(19, 3));
+//	assert(rs3 + rll2 == Rshort(19, 3));
 //	assert(rs3 + 2 == Rshort(19, 3));
 
 	//unärt  dvs. rtal1 = -rtal2;

@@ -22,39 +22,27 @@ public:
     return cin;
   }
 
-  Rational();
+  //######### Constructors ###############
+  // Empty constructor
+  Rational() : nom(0), denom(1) {};
+
   // Constructor that only takes only one number
-  Rational(Tint P);
+  Rational(Tint P) : nom(P), denom(1) {};
 
   // Constructor that takes two numbers
-  Rational(Tint P, Tint Q);
+  Rational(Tint P, Tint Q) : nom(P), denom(Q)
+  {
+    Reduce(nom, denom);
+  }
 
-  // Copy constructor
-  Rational(const Rational<int>& rhs);
-  Rational(const Rational<short>& rhs);
-
+  // ######### Copy constructors ###############
+  template <typename T>
+  Rational(const Rational<T>& rhs) : nom(rhs.nom), denom(rhs.denom) {};
 
 
   //############## Arithmetic operatins ##################
-  // Addition operator
-  Rational operator+(const Rational<Tint> &rhs) const
-  {
-    Rational<Tint> temp;
-    if (denom == rhs.denom) {
-      temp.nom = static_cast<Tint> (nom + rhs.nom);
-      temp.denom = denom;
-    } else {
-      temp.nom = ((nom*rhs.denom) + (denom*rhs.nom));
-      temp.denom = (denom*rhs.denom);
-    }
-
-    Reduce(temp.nom, temp.denom);
-
-    return temp;
-  }
-
   // Addition equal operator
-  Rational operator+=(const Rational<Tint> &rhs) const
+  Rational& operator+=(const Rational<Tint> &rhs) const
   {
     Rational<Tint> temp;
     if (denom == rhs.denom) {
@@ -68,6 +56,12 @@ public:
     Reduce(temp.nom, temp.denom);
 
     return temp;
+  }
+
+  // Addition operator
+  Rational operator+(const Rational<Tint> &rhs) const
+  {
+    return (Rational)*this += rhs;
   }
 
   // Subtraction operator
@@ -112,27 +106,13 @@ public:
   }
 
   //########## Assignment operators #####################################
-  Rational operator=(const Rational<int>& rhs)
+  template <typename T>
+  Rational operator=(const Rational<T>& rhs)
   {
     nom = rhs.nom;
     denom = rhs.denom;
     return *this;
   }
-
-  Rational operator=(const Rational<short>& rhs)
-  {
-    nom = rhs.nom;
-    denom = rhs.denom;
-    return *this;
-  }
-
-  Rational operator=(const Rational<long>& rhs)
-  {
-    nom = rhs.nom;
-    denom = rhs.denom;
-    return *this;
-  }
-
   //########## Comparative operators ####################################
 
   // Compare a Rational number with an Rational number
@@ -148,27 +128,3 @@ public:
   }
 
 };
-
-//######### Constructors ###############
-// Empty constructor
-template <typename Tint>
-Rational<Tint>::Rational() : nom(0), denom(1) {};
-
-// Constructor that only takes only one number
-template <typename Tint>
-Rational<Tint>::Rational(Tint P) : nom(P), denom(1) {};
-
-// Constructor that takes two numbers
-template <typename Tint>
-Rational<Tint>::Rational(Tint P, Tint Q) : nom(P), denom(Q)
-{
-  Reduce(nom, denom);
-}
-
-// Copy constructor
-template <typename Tint>
-Rational<Tint>::Rational(const Rational<int>& rhs) : nom(rhs.nom), denom(rhs.denom) {};
-
-// Copy constructor
-template <typename Tint>
-Rational<Tint>::Rational(const Rational<short>& rhs) : nom(rhs.nom), denom(rhs.denom) {};
