@@ -39,70 +39,55 @@ public:
   template <typename T>
   Rational(const Rational<T>& rhs) : nom(rhs.nom), denom(rhs.denom) {};
 
+  template <typename T>
+  explicit operator T() 
+  {
+    return static_cast<T>(nom/denom);
+  }
+
 
   //############## Arithmetic operatins ##################
   // Addition equal operator
-  Rational& operator+=(const Rational<Tint> &rhs) const
+  Rational& operator+=(const Rational<Tint> &rhs)
   {
-    Rational<Tint> temp;
     if (denom == rhs.denom) {
-      temp.nom = nom + rhs.nom;
-      temp.denom = denom;
+      nom = nom + rhs.nom;
+      denom = denom;
     } else {
-      temp.nom = ((nom*rhs.denom) + (denom*rhs.nom));
-      temp.denom = (denom*rhs.denom);
+      nom = ((nom*rhs.denom) + (denom*rhs.nom));
+      denom = (denom*rhs.denom);
     }
-
-    Reduce(temp.nom, temp.denom);
-
-    return temp;
+    Reduce(nom, denom);
+    return *this;
   }
 
   // Addition operator
-  Rational operator+(const Rational<Tint> &rhs) const
+  Rational<Tint> operator+(const Rational<Tint> &rhs) const
   {
     return (Rational)*this += rhs;
   }
 
+  // Increment prefix operator (++)
+  Rational<Tint> operator++()
+  {
+    nom += denom;
+    Reduce(nom, denom);
+    return *this;
+  }
+
+  // Increment postfix operator (++)
+  Rational<Tint> operator++(int)
+  {
+    Rational<Tint> temp = *this;
+    nom += denom;
+    Reduce(nom, denom);
+    return temp;
+  }
+
   // Subtraction operator
-  Rational operator-(const Rational<Tint> rhs) const
+  Rational<Tint> operator-()
   {
-    Rational<Tint> temp;
-    if (denom == rhs.denom) {
-      temp.nom = nom - rhs.nom;
-      temp.denom = denom;
-    } else {
-      temp.nom = ((nom*rhs.denom) - (denom*rhs.nom));
-      temp.denom = (denom*rhs.denom);
-    }
-
-    Reduce(temp.nom, temp.denom);
-
-    return temp;
-  }
-
-  // Multiplicaton operator
-  Rational operator*(const Rational<Tint> rhs) const
-  {
-    Rational<Tint> temp;
-    temp.nom = nom * rhs.nom;
-    temp.denom = denom * rhs.denom;
-
-    Reduce(temp.nom, temp.denom);
-
-    return temp;
-  }
-
-  // Division operator
-  Rational operator/(const Rational<Tint> rhs) const
-  {
-    Rational<Tint> temp;
-    temp.nom = nom * rhs.denom;
-    temp.denom = denom * rhs.nom;
-
-    Reduce(temp.nom, temp.denom);
-
-    return temp;
+    return Rational(-nom, denom);
   }
 
   //########## Assignment operators #####################################
