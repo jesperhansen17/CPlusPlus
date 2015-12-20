@@ -39,6 +39,7 @@ public:
   template <typename T>
   Rational(const Rational<T>& rhs) : nom(rhs.nom), denom(rhs.denom) {};
 
+  // ######### Overload explicit type converter ##########
   template <typename T>
   explicit operator T() 
   {
