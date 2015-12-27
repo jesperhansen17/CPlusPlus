@@ -1,21 +1,29 @@
 CC = g++ -std=c++11
-DEBUG = -g
-CFLAGS = -c -Wall $(DEBUG)
+CFLAGS = -Wall -g
+
+DEPS = Rational.h
+
+ODIR = obj
+
+_OBJ = main.o Rational.o
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+
 PROGRAM = Rational
 
-all: Rational
+all: $(PROGRAM)
 
-Rational: main.o Rational.o
+$(PROGRAM): $(OBJ)
 	$(CC) $^ -o $@
 
-main.o: main.cpp
-	$(CC) $(CFLAGS) $<
+$(ODIR)/%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-Rational.o: Rational.cpp
-	$(CC) $(CFLAGS) $<
+$(ODIR)/:
+	mkdir -p $@
 
 run:
 	./$(PROGRAM)
 
 clean:
-	rm *o $(PROGRAM) $<
+	rm $(ODIR)/*o $(PROGRAM) $<
