@@ -4,14 +4,11 @@ PROGRAM = Labb6
 
 all: $(PROGRAM)
 
-$(PROGRAM): main.o StructC.o
+$(PROGRAM): main.o
 	$CC $^-o $@
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) $<
-
-StructC.o: StructC.cpp
-	$(CC) $(CFLAGS) $<	
 
 run:
 	./$(PROGRAM)

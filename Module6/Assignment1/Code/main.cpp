@@ -9,6 +9,11 @@ bool is_even(int i)
     return (i % 2) == 0;
 }
 
+bool is_bigger(int i, int j)
+{
+    return i > j;
+}
+
 void print(const vector<int> &vec)
 {
     for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
@@ -19,12 +24,11 @@ void print(const vector<int> &vec)
     cout << endl;
 }
 
-
 // Task 2A
 // C++ implementation of Bubble Sort, but instead of comparing values next to eachother
 // it increments i and compares i value with j value. j value always starts from the beginning and increments
 // up until it reaches i before incrementing i again.
-// If i < j then the i and j will switch place so that the lowest value will be first in the iterator
+// If value of is i < j then the i and j will switch place so that the lowest value will be first in the iterator
 template <class ForwardIterator>
 void ForwardSort(ForwardIterator begin, ForwardIterator end)
 {
@@ -54,10 +58,12 @@ void task1and2A()
         intVector.push_back(i);
     }
 
+	cout << "50 numbers in order: ";
     print(intVector);
 
     random_shuffle(intVector.begin(), intVector.end());
 
+	cout << "50 numbers is in random order: ";
     print(intVector);
 
     // Remove_if can't remove from container itself.
@@ -67,20 +73,32 @@ void task1and2A()
     // That new iterator is the start for which number that will be removed from the container
     intVector.erase( std::remove_if(intVector.begin(), intVector.end(), is_even), intVector.end() );
 
+    // Using Lambdas
+    //intVector.erase( remove_if(intVector.begin(), intVector.end(), [] (int i) { return (i % 2) = 0; }));
+
+	cout << "Removed all the numbers that can be divided by 2: ";
     print(intVector);
 
     ForwardSort(intVector.begin(), intVector.end());
 
+	cout << "Made the numbers in order with bubblesort: ";
     print(intVector);
 }
 
-//template<int N>
-//struct C {
-//    int value;  //det är denna som används
-//    int a[N];   //bara en placeholder för att det ska ta tid att kopiera ett C objekt.
-//};
+template<int N>
+struct C {
+    int value;  //det är denna som används
+    int a[N];   //bara en placeholder för att det ska ta tid att kopiera ett C objekt.
+};
 
+void task2B()
+{
+	vector< C<10> > test2;
 
+}
+
+// Add a predefined number of ints to an vector, then create two reverse iterators and
+// print out the numbers in backward order.
 void task3A()
 {
     vector<int> intVector;
@@ -96,7 +114,7 @@ void task3A()
     reverse_iterator<vector<int>::iterator> reverse_begin(intVector.end());
 
     while (reverse_begin != reverse_end)
-    std::cout << *reverse_begin++ << ' ';
+    	std::cout << *reverse_begin++ << ' ';
     std::cout << '\n';
 }
 
@@ -117,9 +135,15 @@ void task4()
 
     print(intVector);
 
-    sort(intVector.begin(), intVector.end());
-
+    sort(intVector.begin(), intVector.end(), [] (int lhs, int rhs) { return lhs > rhs; });
+    //sort(intVector.begin(), intVector.end(), is_bigger);
     print(intVector);
+}
+
+void Test5()
+{
+	vector<string> mystring;
+	//vector<String> myString;
 }
 
 int main()
@@ -127,6 +151,7 @@ int main()
     //task1and2A();
     //task2B();
     //task3A();
-	task4();
+    //task4();
     return 0;
 }
+
