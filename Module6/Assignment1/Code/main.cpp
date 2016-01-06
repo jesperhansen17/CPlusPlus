@@ -6,22 +6,22 @@ using namespace std;
 
 bool is_even(int i)
 {
-    return (i % 2) == 0;
+	return (i % 2) == 0;
 }
 
 bool is_bigger(int i, int j)
 {
-    return i > j;
+	return i > j;
 }
 
 void print(const vector<int> &vec)
 {
-    for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
-    {
-        cout << *it << ' ';
-    }
-    cout << endl;
-    cout << endl;
+	for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		cout << *it << ' ';
+	}
+	cout << endl;
+	cout << endl;
 }
 
 // Task 2A
@@ -32,115 +32,176 @@ void print(const vector<int> &vec)
 template <class ForwardIterator>
 void ForwardSort(ForwardIterator begin, ForwardIterator end)
 {
-    ForwardIterator i, j;
-
-    for (i = begin; i != end; i++)
-    {
-        for (j = begin; j < i; j++)
-        {
-            if (*i < *j)
-            {
-                swap(*i, *j);
-            }
-        }
-    }
+	for (auto i = begin; i != end; ++i)
+	{
+		for (auto j = begin; j < i; ++j)
+		{ 
+			if (*i < *j)
+			{
+				swap(*i, *j);
+			}
+		}
+	}
 }
+
 
 // Creates an vector that is being filled with 50 numbers from 0 - 49
 // Shuffles the number and then removes the number that is even
 // Finally sort the vector with bubble sort to make the uneven numbers in order
 void task1and2A()
 {
-    vector<int> intVector;
+	vector<int> intVector;
 
-    for (int i = 0; i < 50; i++)
-    {
-        intVector.push_back(i);
-    }
+	for (int i = 0; i < 50; i++)
+	{
+		intVector.push_back(i);
+	}
 
 	cout << "50 numbers in order: ";
-    print(intVector);
+	print(intVector);
 
-    random_shuffle(intVector.begin(), intVector.end());
+	random_shuffle(intVector.begin(), intVector.end());
 
 	cout << "50 numbers is in random order: ";
-    print(intVector);
+	print(intVector);
 
-    // Remove_if can't remove from container itself.
-    // Instead the removal is done by replacing the elements for which is_even is true by the next
-    // element for which it does not, and shortened the range by returning an iterator that ends where
-    // it should be considered the new one past the end element.
-    // That new iterator is the start for which number that will be removed from the container
-    intVector.erase( std::remove_if(intVector.begin(), intVector.end(), is_even), intVector.end() );
+	// Remove_if can't remove from container itself.
+	// Instead the removal is done by replacing the elements for which is_even is true by the next
+	// element for which it does not, and shortened the range by returning an iterator that ends where
+	// it should be considered the new one past the end element.
+	// That new iterator is the start for which number that will be removed from the container
+	intVector.erase(std::remove_if(intVector.begin(), intVector.end(), is_even), intVector.end());
 
-    // Using Lambdas
-    //intVector.erase( remove_if(intVector.begin(), intVector.end(), [] (int i) { return (i % 2) = 0; }));
+	// Using Lambdas
+	//intVector.erase( remove_if(intVector.begin(), intVector.end(), [] (int i) { return (i % 2) = 0; }));
 
 	cout << "Removed all the numbers that can be divided by 2: ";
-    print(intVector);
+	print(intVector);
 
-    ForwardSort(intVector.begin(), intVector.end());
+	ForwardSort<vector<int>::iterator>(intVector.begin(), intVector.end());
 
 	cout << "Made the numbers in order with bubblesort: ";
-    print(intVector);
+	print(intVector);
 }
 
-template<int N>
+const int S = 1000;
+
 struct C {
-    int value;  //det är denna som används
-    int a[N];   //bara en placeholder för att det ska ta tid att kopiera ett C objekt.
+	int value;
+	explicit C(int x) :value(x){};
+	C() = default;
+	C(const C&) = default;
+	C& operator=(C rhs) { value = rhs.value; return *this; }
+	C& operator++() { ++value; return *this; }
+	bool operator<(const C & rhs) const { return this->value < rhs.value; }
+
+	friend 	ostream& operator<<(ostream & cout, C& rhs) {
+		cout << rhs.value;
+		return cout;
+	}
+private:
+	char A[S];
 };
 
+// Use ForwardSort to sort a vector of C objects
 void task2B()
 {
-	vector< C<10> > test2;
+	vector< C > test2;
+	C c1;
+
+	// Push_back C-objects to an vector
+	for (int i = 0; i < 50; i++) {
+		c1.value = rand() % 100;
+		test2.push_back(c1);
+	}
+	
+	// Print the numbers
+	cout << "50 numbers in random order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
+	cout << endl;
+
+	// Sort using ForwardSort
+	ForwardSort<vector<C>::iterator>(test2.begin(), test2.end());
+
+	// Print the numbers
+	cout << "50 numbers in sorted order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
 
 }
 
 // Add a predefined number of ints to an vector, then create two reverse iterators and
-// print out the numbers in backward order.
+// print out the numbers in backward order using ForwardSort by using the reverse iterators as arguments.
 void task3A()
 {
-    vector<int> intVector;
+	vector< C > test2;
+	C c1;
 
-    for (int i = 0; i < 50; i++)
-    {
-        intVector.push_back(i);
-    }
+	// Push_back C-objects to an vector
+	for (int i = 0; i < 50; i++) {
+		c1.value = rand() % 100;
+		test2.push_back(c1);
+	}
 
-    print(intVector);
+	// Print the numbers
+	cout << "50 numbers in random order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
+	cout << endl;
 
-    reverse_iterator<vector<int>::iterator> reverse_end(intVector.begin());
-    reverse_iterator<vector<int>::iterator> reverse_begin(intVector.end());
+	// Create two reverse iterators 
+	reverse_iterator<vector<C>::iterator> reverse_end(test2.begin());
+	reverse_iterator<vector<C>::iterator> reverse_begin(test2.end());
 
-    while (reverse_begin != reverse_end)
-    	std::cout << *reverse_begin++ << ' ';
-    std::cout << '\n';
+	// Use the reverse iterators for sorting backwards using forwardSort
+	ForwardSort<reverse_iterator<vector<C>::iterator>>(reverse_begin, reverse_end);
+
+	// Print the numbers
+	cout << "50 numbers in sorted order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
+}
+
+void task3B()
+{
+	vector<int> intVector;
+
+	for (int i = 0; i < 50; i++)
+	{
+		intVector.push_back(rand() % 100);
+	}
+
+	print(intVector);
 }
 
 // Create a vector with a predefined number of ints, then shuffle them and then
 // sort the numbers using std::sort and use a lambda exressesion as a parameter.
 void task4()
 {
-    vector<int> intVector;
+	vector<int> intVector;
 
-    for (int i = 0; i < 50; i++)
-    {
-        intVector.push_back(i);
-    }
+	for (int i = 0; i < 50; i++)
+	{
+		intVector.push_back(i);
+	}
 
-    print(intVector);
+	print(intVector);
 
-    random_shuffle(intVector.begin(), intVector.end());
+	random_shuffle(intVector.begin(), intVector.end());
 
-    print(intVector);
+	print(intVector);
 
-    sort(intVector.begin(), intVector.end(), [] (int lhs, int rhs) { return lhs > rhs; });
-    //sort(intVector.begin(), intVector.end(), is_bigger);
-    print(intVector);
+	sort(intVector.begin(), intVector.end(), [](int lhs, int rhs) { return lhs > rhs; });
+	//sort(intVector.begin(), intVector.end(), is_bigger);
+	print(intVector);
 }
 
-void Test5()
+void task5()
 {
 	vector<string> mystring;
 	//vector<String> myString;
@@ -148,10 +209,12 @@ void Test5()
 
 int main()
 {
-    //task1and2A();
-    //task2B();
-    //task3A();
-    //task4();
-    return 0;
+	//task1and2A();			// Done
+	//task2B();				// Done
+	task3A();				// Done
+	//task3B();				// Not Done
+	//task4();				// Now only working with ints
+	//task5();				// Not started
+	return 0;
 }
 
