@@ -4,16 +4,40 @@
 
 using namespace std;
 
+const int S = 1000;
+
+// Struct C
+struct C {
+	int value;
+	explicit C(int x) :value(x){};
+	C() = default;
+	C(const C&) = default;
+	C& operator=(C rhs) { value = rhs.value; return *this; }
+	C& operator++() { ++value; return *this; }
+	bool operator<(const C & rhs) const { return this->value < rhs.value; }
+	bool operator>(const C & rhs) const { return this->value > rhs.value; }
+
+	friend 	ostream& operator<<(ostream & cout, C& rhs) {
+		cout << rhs.value;
+		return cout;
+	}
+private:
+	char A[S];
+};
+
+// Unary Predicate for deciding if i is even or not
 bool is_even(int i)
 {
 	return (i % 2) == 0;
 }
 
+// Binary Predicate for deciding if i is bigger than j
 bool is_bigger(int i, int j)
 {
 	return i > j;
 }
 
+// Print function for printing out a vector that holds ints
 void print(const vector<int> &vec)
 {
 	for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
@@ -38,6 +62,22 @@ void ForwardSort(ForwardIterator begin, ForwardIterator end)
 		{ 
 			if (*i < *j)
 			{
+				swap(*i, *j);
+			}
+		}
+	}
+}
+
+// Task 3B
+// ForwardSort that that has three arguments.
+// Iterator for begin and end. Also a lambda function that tells with sort the 
+// function is gonna use. And that function is represented by comp()
+template <class ForwardIterator, class Compare>
+void ForwardSort(ForwardIterator begin, ForwardIterator end, Compare comp)
+{
+	for (auto i = begin; i != end; ++i) {
+		for (auto j = begin; j < i; ++j) {
+			if (comp(*i, *j)) {
 				swap(*i, *j);
 			}
 		}
@@ -84,25 +124,6 @@ void task1and2A()
 	print(intVector);
 }
 
-const int S = 1000;
-
-struct C {
-	int value;
-	explicit C(int x) :value(x){};
-	C() = default;
-	C(const C&) = default;
-	C& operator=(C rhs) { value = rhs.value; return *this; }
-	C& operator++() { ++value; return *this; }
-	bool operator<(const C & rhs) const { return this->value < rhs.value; }
-
-	friend 	ostream& operator<<(ostream & cout, C& rhs) {
-		cout << rhs.value;
-		return cout;
-	}
-private:
-	char A[S];
-};
-
 // Use ForwardSort to sort a vector of C objects
 void task2B()
 {
@@ -133,8 +154,6 @@ void task2B()
 
 }
 
-// Add a predefined number of ints to an vector, then create two reverse iterators and
-// print out the numbers in backward order using ForwardSort by using the reverse iterators as arguments.
 void task3A()
 {
 	vector< C > test2;
@@ -169,36 +188,59 @@ void task3A()
 
 void task3B()
 {
-	vector<int> intVector;
+	vector< C > test2;
+	C c1;
 
-	for (int i = 0; i < 50; i++)
-	{
-		intVector.push_back(rand() % 100);
+	// Push_back C-objects to an vector
+	for (int i = 0; i < 50; i++) {
+		c1.value = rand() % 100;
+		test2.push_back(c1);
 	}
 
-	print(intVector);
+	// Print the numbers
+	cout << "50 numbers in random order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
+	cout << endl;
+
+	// Reverse sort the vector with the help of a lambda function in the call of ForwardSort
+	ForwardSort(test2.begin(), test2.end(), [](C lhs, C rhs) { return lhs > rhs; });
+
+	// Print the numbers
+	cout << "50 numbers in sorted order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
 }
 
-// Create a vector with a predefined number of ints, then shuffle them and then
+// Create a vector with a predefined number of C objects, then shuffle them and then
 // sort the numbers using std::sort and use a lambda exressesion as a parameter.
 void task4()
 {
-	vector<int> intVector;
+	vector< C > test2;
+	C c1;
 
-	for (int i = 0; i < 50; i++)
-	{
-		intVector.push_back(i);
+	// Push_back C-objects to an vector
+	for (int i = 0; i < 50; i++) {
+		c1.value = rand() % 100;
+		test2.push_back(c1);
 	}
 
-	print(intVector);
+	// Print the numbers
+	cout << "50 numbers in random order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
+	cout << endl;
 
-	random_shuffle(intVector.begin(), intVector.end());
+	sort(test2.begin(), test2.end(), [](C lhs, C rhs) { return lhs < rhs;  });
 
-	print(intVector);
-
-	sort(intVector.begin(), intVector.end(), [](int lhs, int rhs) { return lhs > rhs; });
-	//sort(intVector.begin(), intVector.end(), is_bigger);
-	print(intVector);
+	// Print the numbers
+	cout << "50 numbers in sorted order: ";
+	for (int i = 0; i < test2.size(); i++) {
+		cout << test2.at(i).value << " ";
+	}
 }
 
 void task5()
@@ -211,9 +253,9 @@ int main()
 {
 	//task1and2A();			// Done
 	//task2B();				// Done
-	task3A();				// Done
-	//task3B();				// Not Done
-	//task4();				// Now only working with ints
+	//task3A();				// Done
+	task3B();				// Not Done
+	//task4();				// Done
 	//task5();				// Not started
 	return 0;
 }
