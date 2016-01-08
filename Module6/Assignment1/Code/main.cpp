@@ -17,7 +17,7 @@ struct C {
 	bool operator<(const C & rhs) const { return this->value < rhs.value; }
 	bool operator>(const C & rhs) const { return this->value > rhs.value; }
 
-	friend 	ostream& operator<<(ostream & cout, C& rhs) {
+	friend ostream& operator<<(ostream & cout, const C& rhs) {
 		cout << rhs.value;
 		return cout;
 	}
@@ -37,15 +37,29 @@ bool is_bigger(int i, int j)
 	return i > j;
 }
 
-// Print function for printing out a vector that holds ints
-void print(const vector<int> &vec)
+// Print function for printing out a vector
+template <class T>
+void printVector(const vector<T> &vec)
 {
-	for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); it++)
+	for (vector<T>::const_iterator it = vec.begin(); it != vec.end(); it++)
 	{
 		cout << *it << ' ';
 	}
+
 	cout << endl;
 	cout << endl;
+}
+
+// Push_Back objects to a vector
+template <class T>
+void pushVector(vector<T> &vec)
+{
+	T c1;
+
+	for (int i = 0; i < 50; i++) {
+		c1.value = rand() % 100;
+		vec.push_back(c1);
+	}
 }
 
 // Task 2A
@@ -97,13 +111,15 @@ void task1and2A()
 		intVector.push_back(i);
 	}
 
+	cout << "Task 1: Erase and remove from vector!!!!" << endl;
+
 	cout << "50 numbers in order: ";
-	print(intVector);
+	printVector(intVector);
 
 	random_shuffle(intVector.begin(), intVector.end());
 
 	cout << "50 numbers is in random order: ";
-	print(intVector);
+	printVector(intVector);
 
 	// Remove_if can't remove from container itself.
 	// Instead the removal is done by replacing the elements for which is_even is true by the next
@@ -116,61 +132,50 @@ void task1and2A()
 	//intVector.erase( remove_if(intVector.begin(), intVector.end(), [] (int i) { return (i % 2) = 0; }));
 
 	cout << "Removed all the numbers that can be divided by 2: ";
-	print(intVector);
+	printVector(intVector);
 
 	ForwardSort<vector<int>::iterator>(intVector.begin(), intVector.end());
 
+	cout << "Task 2: Sort numbers with bubblesort!!!!!!!!!" << endl;
+
 	cout << "Made the numbers in order with bubblesort: ";
-	print(intVector);
+	printVector(intVector);
 }
 
 // Use ForwardSort to sort a vector of C objects
 void task2B()
 {
 	vector< C > test2;
-	C c1;
 
-	// Push_back C-objects to an vector
-	for (int i = 0; i < 50; i++) {
-		c1.value = rand() % 100;
-		test2.push_back(c1);
-	}
+	pushVector(test2);
+
+	cout << "Task 2B: Sort numbers with ForwardSort!!!!!!!!" << endl;
 	
 	// Print the numbers
 	cout << "50 numbers in random order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
-	cout << endl;
+	printVector(test2);
 
 	// Sort using ForwardSort
 	ForwardSort<vector<C>::iterator>(test2.begin(), test2.end());
 
 	// Print the numbers
 	cout << "50 numbers in sorted order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
+	printVector(test2);
 
 }
 
 void task3A()
 {
 	vector< C > test2;
-	C c1;
 
 	// Push_back C-objects to an vector
-	for (int i = 0; i < 50; i++) {
-		c1.value = rand() % 100;
-		test2.push_back(c1);
-	}
+	pushVector(test2);
+
+	cout << "Task 3A: Sort backwards using reverseIterators!!!!!!" << endl;
 
 	// Print the numbers
 	cout << "50 numbers in random order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
-	cout << endl;
+	printVector(test2);
 
 	// Create two reverse iterators 
 	reverse_iterator<vector<C>::iterator> reverse_end(test2.begin());
@@ -181,37 +186,28 @@ void task3A()
 
 	// Print the numbers
 	cout << "50 numbers in sorted order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
+	printVector(test2);
 }
 
 void task3B()
 {
 	vector< C > test2;
-	C c1;
 
 	// Push_back C-objects to an vector
-	for (int i = 0; i < 50; i++) {
-		c1.value = rand() % 100;
-		test2.push_back(c1);
-	}
+	pushVector(test2);
+
+	cout << "Task 3B: Sort backwards using a lambda expression!!!!!!!!!" << endl;
 
 	// Print the numbers
 	cout << "50 numbers in random order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
-	cout << endl;
+	printVector(test2);
 
 	// Reverse sort the vector with the help of a lambda function in the call of ForwardSort
 	ForwardSort(test2.begin(), test2.end(), [](C lhs, C rhs) { return lhs > rhs; });
 
 	// Print the numbers
 	cout << "50 numbers in sorted order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
+	printVector(test2);
 }
 
 // Create a vector with a predefined number of C objects, then shuffle them and then
@@ -219,28 +215,21 @@ void task3B()
 void task4()
 {
 	vector< C > test2;
-	C c1;
 
 	// Push_back C-objects to an vector
-	for (int i = 0; i < 50; i++) {
-		c1.value = rand() % 100;
-		test2.push_back(c1);
-	}
+	pushVector(test2);
+
+	cout << "Task 4: Sort forward using STL sort using lambda expression!!!!!!!!" << endl;
 
 	// Print the numbers
 	cout << "50 numbers in random order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
-	cout << endl;
+	printVector(test2);
 
 	sort(test2.begin(), test2.end(), [](C lhs, C rhs) { return lhs < rhs;  });
 
 	// Print the numbers
 	cout << "50 numbers in sorted order: ";
-	for (int i = 0; i < test2.size(); i++) {
-		cout << test2.at(i).value << " ";
-	}
+	printVector(test2);
 }
 
 void task5()
@@ -251,11 +240,11 @@ void task5()
 
 int main()
 {
-	//task1and2A();			// Done
-	//task2B();				// Done
-	//task3A();				// Done
-	task3B();				// Not Done
-	//task4();				// Done
+	task1and2A();			// Done
+	task2B();				// Done
+	task3A();				// Done
+	task3B();				// Done
+	task4();				// Done
 	//task5();				// Not started
 	return 0;
 }
