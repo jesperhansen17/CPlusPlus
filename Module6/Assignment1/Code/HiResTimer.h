@@ -1,10 +1,6 @@
-//--------------------------------------------------------------------------------------
 // File: HiResTimer.h
-//
 // Measure time using QueryPerformanceCounter
-//
-// Copyright (c) Stefan Petersson 2011. All rights reserved.
-//--------------------------------------------------------------------------------------
+
 #ifndef HI_RES_TIMER__H
 #define HI_RES_TIMER__H
 

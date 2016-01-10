@@ -2,6 +2,10 @@
 #include <vector>
 #include <algorithm>
 
+// Task5 includes:
+#include "HiResTimer.h"
+#include "String.hpp"
+
 using namespace std;
 
 const int S = 1000;
@@ -54,11 +58,8 @@ void printVector(const vector<T> &vec)
 template <class T>
 void pushVector(vector<T> &vec)
 {
-	T c1;
-
 	for (int i = 0; i < 50; i++) {
-		c1.value = rand() % 100;
-		vec.push_back(c1);
+		vec.push_back(T(rand() % 100));
 	}
 }
 
@@ -232,10 +233,48 @@ void task4()
 	printVector(test2);
 }
 
+char GenRandLetter()
+{
+	return ('a' + (rand()*('z' - 'a' + 1) / RAND_MAX));
+}
+
+const int NofStrings = 10000;
+const int MaxLengthofString = 100;
+
+template <class str>
+double GenerateStrings(vector<str> &VectorofString)
+{
+	HiResTimer timer;
+
+	VectorofString.resize(0);
+	VectorofString.shrink_to_fit();
+	VectorofString.resize(NofStrings);
+
+	timer.Start();
+
+	for (unsigned i = 0; i < VectorofString.size(); ++i)
+	{
+		int length = MaxLengthofString * rand() / RAND_MAX;
+		for (int j = 0; j < length; ++j)
+		{
+			VectorofString[i].push_back(GenRandLetter());
+		}
+	}
+
+	timer.Stop();
+
+	return timer.GetDeltaTime();
+}
+
 void task5()
 {
 	vector<string> mystring;
-	//vector<String> myString;
+	auto times = GenerateStrings(mystring);
+	cout << "Time with std::string: " << times << endl;
+
+	vector<String> myString;
+	auto timeS = GenerateStrings(myString);
+	cout << "Time with String: " << timeS << endl;
 }
 
 int main()
@@ -245,7 +284,14 @@ int main()
 	task3A();				// Done
 	task3B();				// Done
 	task4();				// Done
-	//task5();				// Not started
+	task5();				// Done, needs explanation
+
+	// ##########Debug#############
+	// std::string: 1.26071e-005
+	// String:		4.87699e-007
+	// ##########Release###########
+	// std::string:	9.08576e-008
+	// String:		6.95953e-008
 	return 0;
 }
 

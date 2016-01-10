@@ -1,19 +1,13 @@
-//--------------------------------------------------------------------------------------
 // File: HiResTimer.cpp
 //
 // Measure time using QueryPerformanceCounter
-//
-// Copyright (c) Stefan Petersson 2011. All rights reserved.
-//--------------------------------------------------------------------------------------
 #include "HiResTimer.h"
-
-
 
 HiResTimer::HiResTimer()
 {
 	cntsPerSec = 0;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
-	
+	QueryPerformanceCounter((LARGE_INTEGER*)&cntsPerSec);
+
 	secsPerCnt = 1.0f / (float)cntsPerSec;
 
 	/*
@@ -41,5 +35,3 @@ double HiResTimer::GetDeltaTime()
 {
 	return (stopTimeStamp - startTimeStamp) * secsPerCnt;
 }
-
-
